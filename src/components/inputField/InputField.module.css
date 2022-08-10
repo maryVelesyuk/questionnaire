@@ -1,0 +1,22 @@
+.label {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+}
+.input {
+  width: 100%;
+  max-height: 40px;
+  padding: 10px 15px;
+  margin-top: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border 0.4s ease-in-out;
+}
+.input::placeholder {
+  color: #ccc;
+}
+/* .input:focus {
+  outline: 1px solid #555;
+} */

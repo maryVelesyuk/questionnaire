@@ -1,0 +1,9 @@
+.form {
+  margin: 0 auto;
+  padding: 60px;
+  width: 700px;
+  min-height: 600px;
+  background-color: #fff;
+  box-shadow: 0 10px 23px 0 #162936;
+  border-radius: 4px;
+}
