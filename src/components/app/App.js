@@ -1,6 +1,5 @@
 import { Component } from "react";
 import Button from "../button/Button";
-import ButtonsBlock from "../buttonsBlock/ButtonsBlock";
 import CustomForm from "../customForm/CustomForm";
 import InputField from "../inputField/InputField";
 import TextAreaField from "../textAreaField/TextAreaField";
@@ -45,10 +44,10 @@ class App extends Component {
             placeholder="опишите ваш последний проект"
             rows="7"
           />
-          <ButtonsBlock>
+          <div className="buttonsBlock">
             <Button text="Отмена" />
             <Button text="Сохранить" />
-          </ButtonsBlock>
+          </div>
         </CustomForm>
       </div>
     );

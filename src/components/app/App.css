@@ -4,3 +4,9 @@
   background: linear-gradient(120.21deg, #3e708e 11.18%, #64969b 74.17%);
   padding: 50px;
 }
+.buttonsBlock {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
