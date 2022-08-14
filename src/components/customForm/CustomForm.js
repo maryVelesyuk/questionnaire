@@ -3,7 +3,11 @@ import s from "./CustomForm.module.css";
 
 class CustomForm extends Component {
   render() {
-    return <form className={s.form}>{this.props.children}</form>;
+    return (
+      <form onSubmit={this.props.onSubmit} className={s.form}>
+        {this.props.children}
+      </form>
+    );
   }
 }
 

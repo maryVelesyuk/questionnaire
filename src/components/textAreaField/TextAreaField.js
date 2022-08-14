@@ -3,14 +3,15 @@ import s from "./TextAreaField.module.css";
 
 class TextAreaField extends Component {
   render() {
-    const { label, placeholder, rows } = this.props;
+    const { value, onChange, label, ...textAreaProps } = this.props;
     return (
       <label className={s.label}>
         {label}
         <textarea
-          placeholder={placeholder}
-          rows={rows}
+          {...textAreaProps}
           className={s.textarea}
+          value={value}
+          onChange={(e) => onChange(e)}
         />
       </label>
     );

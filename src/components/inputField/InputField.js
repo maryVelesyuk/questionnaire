@@ -3,11 +3,16 @@ import s from "./InputField.module.css";
 
 class InputField extends Component {
   render() {
-    const { label, type, placeholder } = this.props;
+    const { label, value, onChange, ...inputProps } = this.props;
     return (
       <label className={s.label}>
         {label}
-        <input type={type} placeholder={placeholder} className={s.input} />
+        <input
+          {...inputProps}
+          className={s.input}
+          value={value}
+          onChange={(e) => onChange(e)}
+        />
       </label>
     );
   }
