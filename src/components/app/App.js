@@ -31,7 +31,7 @@ class App extends Component {
     errors[name] = "";
     this.setState({ errors });
 
-    if (name === "site") {
+    if (!this.state.site && name === "site") {
       this.setState({ site: "https://" });
     }
   };
@@ -186,6 +186,9 @@ class App extends Component {
     let textStr = text.trim();
     if (!textStr) {
       return "Поле пустое. Заполните, пожалуйста";
+    }
+    if (textStr.length > 600) {
+      return "Превышен лимит симолов в поле";
     }
     return "";
   };
