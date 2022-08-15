@@ -77,7 +77,6 @@ class App extends Component {
     if (this.isValid(errors)) {
       this.setState({ isSubmitted: true });
     } else {
-      //исправить!!!!!!!
       let s1 = { ...this.state };
       s1.errors = errors;
       this.setState(s1);
