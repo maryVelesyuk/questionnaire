@@ -19,3 +19,26 @@
 .textarea:focus {
   border: 1px solid #555;
 }
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+.container {
+  position: relative;
+  font-size: 12px;
+}
+.counter {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  color: #ccc;
+}
+.counterError {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  color: red;
+}

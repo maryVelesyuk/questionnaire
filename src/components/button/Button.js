@@ -3,8 +3,9 @@ import s from "./Button.module.css";
 
 class Button extends Component {
   render() {
+    const { text, ...buttonProps } = this.props;
     return (
-      <button type={this.props.type} className={s.button}>
+      <button {...buttonProps} className={s.button}>
         {this.props.text}
       </button>
     );

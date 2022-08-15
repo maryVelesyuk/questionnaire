@@ -20,3 +20,9 @@
 /* .input:focus {
   outline: 1px solid #555;
 } */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
