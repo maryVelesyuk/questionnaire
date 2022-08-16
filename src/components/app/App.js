@@ -5,24 +5,22 @@ import InputField from "../inputField/InputField";
 import Questionnaire from "../questionnaire/Questionnaire";
 import TextAreaField from "../textAreaField/TextAreaField";
 import Title from "../title/Title";
+import validation from "../../utilities/validation";
+import { formInitialState } from "../../constants/initialState";
 import "./App.css";
 
 class App extends Component {
-  state = {
-    name: "",
-    lastName: "",
-    birthDate: "",
-    site: "",
-    tel: "",
-    description: "",
-    technologies: "",
-    lastProjectDescription: "",
-    errors: {},
-    isSubmitted: false,
-  };
+  state = formInitialState;
 
   handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    let name = e.target.name;
+    let value = e.target.value;
+    //будет заменять введенные не числа и не "-" на пустую строку
+    if (name === "tel") {
+      value = value.replace(/[^\d-]/g, "");
+    }
+
+    this.setState({ [name]: value });
   };
 
   handleFocus = (e) => {
@@ -40,156 +38,30 @@ class App extends Component {
     let name = e.target.name;
     let value = e.target.value;
     let { errors } = this.state;
-    switch (name) {
-      case "name":
-        errors.name = this.validateName(value);
-        break;
-      case "lastName":
-        errors.lastName = this.validateName(value);
-        break;
-      case "birthDate":
-        errors.birthDate = this.validateBirthDate(value);
-        break;
-      case "site":
-        errors.site = this.validateSite(value);
-        break;
-      case "tel":
-        errors.tel = this.validateTel(value);
-        break;
-      case "description":
-        errors.description = this.validateText(value);
-        break;
-      case "technologies":
-        errors.technologies = this.validateText(value);
-        break;
-      case "lastProjectDescription":
-        errors.lastProjectDescription = this.validateText(value);
-        break;
-      default:
-        break;
-    }
+    errors[name] = validation(name, value);
     this.setState({ errors });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    let errors = this.validateAllField();
-    if (this.isValid(errors)) {
+
+    //Здесь перебираю стейт и на каждое его поле вызываю validation().Наверное не очень хорошее решение, так как плохо расширяемое из-за проверки if key!=, но как сделать по другому я не придумала)
+    let errors = {};
+    for (let key in this.state) {
+      if (key !== "errors" && key !== "isSubmitted") {
+        errors[key] = validation(key, this.state[key]);
+      }
+    }
+    if (!Object.values(errors).filter((value) => value).length) {
       this.setState({ isSubmitted: true });
     } else {
-      let s1 = { ...this.state };
-      s1.errors = errors;
-      this.setState(s1);
+      this.setState({ errors });
     }
   };
 
   handleReset = () => {
-    this.setState({
-      name: "",
-      lastName: "",
-      birthDate: "",
-      site: "",
-      tel: "",
-      description: "",
-      technologies: "",
-      lastProjectDescription: "",
-
-      errors: {},
-    });
-  };
-
-  isValid = (errors) => {
-    //errors должны иметь ключи и не пустые значения
-    let keys = Object.keys(errors);
-    let count = keys.reduce(
-      (sum, currentValue) => (errors[currentValue] ? sum + 1 : sum),
-      0
-    );
-    return count === 0;
-  };
-
-  validateAllField = () => {
-    let {
-      name,
-      lastName,
-      birthDate,
-      site,
-      tel,
-      description,
-      technologies,
-      lastProjectDescription,
-    } = this.state;
-    let errors = {};
-    errors.name = this.validateName(name);
-    errors.lastName = this.validateName(lastName);
-    errors.birthDate = this.validateBirthDate(birthDate);
-    errors.site = this.validateSite(site);
-    errors.tel = this.validateTel(tel);
-    errors.description = this.validateText(description);
-    errors.technologies = this.validateText(technologies);
-    errors.lastProjectDescription = this.validateText(lastProjectDescription);
-    return errors;
-  };
-
-  validateName = (name) => {
-    let nameStr = name.trim();
-    if (!nameStr) {
-      return "Поле пустое. Заполните, пожалуйста";
-    }
-    if (nameStr.length < 2) {
-      return "Имя должно содержать 2 символа и более";
-    }
-    if (!/^[A-ZА-Я]/.test(nameStr)) {
-      return "Имя должно начинаться с большой буквы";
-    }
-    return "";
-  };
-
-  validateTel = (tel) => {
-    let telStr = tel.trim();
-    if (!telStr) {
-      return "Поле Телефон пустое. Заполните, пожалуйста";
-    }
-    if (!telStr.length === 12) {
-      return "Телефон должен содержать 12 символов, включая -";
-    }
-    if (!/^\d-\d\d\d\d-\d\d-\d\d$/.test(telStr)) {
-      return "Телефон должен быть в формате 7-7777-77-77";
-    }
-    return "";
-  };
-
-  validateBirthDate = (birthDate) => {
-    let birthDateStr = birthDate.toString().trim();
-    if (!birthDateStr) {
-      return "Поле пустое. Заполните, пожалуйста";
-    }
-    return "";
-  };
-
-  validateSite = (site) => {
-    let siteStr = site.trim();
-    if (!siteStr) {
-      return "Поле пустое. Заполните, пожалуйста";
-    }
-    if (!/^https:\/\//.test(siteStr)) {
-      return "Название сайта должно начинаться с https://";
-    }
-    if (!/\./.test(siteStr)) {
-      return "Название сайта должно содержать .";
-    }
-    return "";
-  };
-
-  validateText = (text) => {
-    let textStr = text.trim();
-    if (!textStr) {
-      return "Поле пустое. Заполните, пожалуйста";
-    }
-    if (textStr.length > 600) {
-      return "Превышен лимит симолов в поле";
-    }
-    return "";
+    //если я передаю в setstate просто formInitialState, сбрасываются только введенные данные, а errors не сбрасываются. это потому что errors объект и он ссылается все равно на errors из стейта?
+    this.setState({ ...formInitialState, errors: {} });
   };
 
   render() {
@@ -304,16 +176,7 @@ class App extends Component {
             </div>
           </CustomForm>
         ) : (
-          <Questionnaire
-            name={name}
-            lastName={lastName}
-            birthDate={birthDate}
-            site={site}
-            tel={tel}
-            description={description}
-            technologies={technologies}
-            lastProjectDescription={lastProjectDescription}
-          />
+          <Questionnaire {...this.state} />
         )}
       </div>
     );
