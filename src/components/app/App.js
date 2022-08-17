@@ -15,9 +15,16 @@ class App extends Component {
   handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    //будет заменять введенные не числа и не "-" на пустую строку
     if (name === "tel") {
       value = value.replace(/[^\d-]/g, "");
+
+      //добавление '-' при вводе телефона
+      if (value.length === 1 || value.length === 6 || value.length === 9) {
+        value = value + "-";
+      }
+      if (value.length >= 12) {
+        value = value.slice(0, 12);
+      }
     }
 
     this.setState({ [name]: value });
@@ -25,9 +32,14 @@ class App extends Component {
 
   handleFocus = (e) => {
     let name = e.target.name;
-    let errors = this.state.errors;
+    let errors = {};
     errors[name] = "";
-    this.setState({ errors });
+    //если просто сделать setState({errors}), то перезаписывается полность errors
+    // и из-за этого тереются ошибки и других полей,
+    // поэтому я здесь разворачиваю errors из стейта и
+    // перезаписываю только ошибку поля, которое сейчас в фокусе
+    //может можно это по другому написать?
+    this.setState({ errors: { ...this.state.errors, ...errors } });
 
     if (!this.state.site && name === "site") {
       this.setState({ site: "https://" });
@@ -37,15 +49,14 @@ class App extends Component {
   handleBlur = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    let { errors } = this.state;
+    let errors = {};
     errors[name] = validation(name, value);
-    this.setState({ errors });
+    this.setState({ errors: { ...this.state.errors, ...errors } });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    //Здесь перебираю стейт и на каждое его поле вызываю validation().Наверное не очень хорошее решение, так как плохо расширяемое из-за проверки if key!=, но как сделать по другому я не придумала)
     let errors = {};
     for (let key in this.state) {
       if (key !== "errors" && key !== "isSubmitted") {
@@ -60,8 +71,7 @@ class App extends Component {
   };
 
   handleReset = () => {
-    //если я передаю в setstate просто formInitialState, сбрасываются только введенные данные, а errors не сбрасываются. это потому что errors объект и он ссылается все равно на errors из стейта?
-    this.setState({ ...formInitialState, errors: {} });
+    this.setState(formInitialState);
   };
 
   render() {
