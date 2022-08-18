@@ -1,4 +1,4 @@
-export const formInitialState = {
+export const personalInfoInitialState = {
   name: "",
   lastName: "",
   birthDate: "",
@@ -7,6 +7,4 @@ export const formInitialState = {
   description: "",
   technologies: "",
   lastProjectDescription: "",
-  errors: {},
-  isSubmitted: false,
 };

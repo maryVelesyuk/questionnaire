@@ -1,14 +1,11 @@
-import { Component } from "react";
 import s from "./CustomForm.module.css";
 
-class CustomForm extends Component {
-  render() {
-    return (
-      <form onSubmit={this.props.onSubmit} className={s.form}>
-        {this.props.children}
-      </form>
-    );
-  }
-}
+const CustomForm = (props) => {
+  return (
+    <form onSubmit={props.onSubmit} className={s.form} noValidate>
+      {props.children}
+    </form>
+  );
+};
 
 export default CustomForm;
