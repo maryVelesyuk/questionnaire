@@ -1,4 +1,4 @@
-const validation = (name, value) => {
+export const validation = (name, value) => {
   let valueStr = value.trim();
   switch (name) {
     case "name":
@@ -61,4 +61,13 @@ const validation = (name, value) => {
   }
 };
 
-export default validation;
+export const addPhoneMask = (value) => {
+  value = value.replace(/[^\d-]/g, "");
+  if (value.length === 1 || value.length === 6 || value.length === 9) {
+    return value + "-";
+  }
+  if (value.length >= 12) {
+    return (value = value.slice(0, 12));
+  }
+  return value;
+};

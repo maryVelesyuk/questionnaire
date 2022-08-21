@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
+import { ACTION_TYPES } from "../../constants/actionTypes";
 import s from "./Notification.module.css";
 
 const Template = ({ closePopUp, notificationText }) => {
@@ -18,9 +19,9 @@ const Template = ({ closePopUp, notificationText }) => {
   );
 };
 
-const Notification = ({ isShowPopUp, setIsShowPopUp, notificationText }) => {
+const Notification = ({ isShowPopUp, dispatch, notificationText }) => {
   const closePopUp = () => {
-    setIsShowPopUp(false);
+    dispatch({ type: ACTION_TYPES.CLOSE_POPUP });
   };
   const domNode = document.getElementById("notification");
   if (domNode && isShowPopUp) {
